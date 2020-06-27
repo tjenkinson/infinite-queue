@@ -1,3 +1,5 @@
+[![npm version](https://badge.fury.io/js/infinite-queue.svg)](https://badge.fury.io/js/infinite-queue)
+
 # Infinite Queue
 
 A small library which implements a queue where you are able to request items early if the queue is empty.
