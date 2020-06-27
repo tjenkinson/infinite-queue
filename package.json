@@ -1,0 +1,48 @@
+{
+  "name": "infinite-queue",
+  "version": "0.0.1",
+  "description": "A small library which implements a queue where you are able to request items early if the queue is empty.",
+  "main": "dist/infinite-queue.js",
+  "module": "dist/infinite-queue.es.js",
+  "types": "dist/infinite-queue.d.ts",
+  "keywords": [
+    "queue",
+    "infinite",
+    "promise"
+  ],
+  "scripts": {
+    "build": "rm -rf dist && rollup --config rollup.config.js",
+    "watch": "rollup --config rollup.config.js --watch",
+    "prettier": "prettier --write .",
+    "lint": "prettier --check .",
+    "prepublishOnly": "npm run build && npm test",
+    "preversion": "npm run build && npm test",
+    "test": "jest"
+  },
+  "hooks": {
+    "pre-commit": "npm run prettier"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tjenkinson/infinite-queue.git"
+  },
+  "author": "Tom Jenkinson <tom@tjenkinson.me>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tjenkinson/infinite-queue/issues"
+  },
+  "homepage": "https://github.com/tjenkinson/infinite-queue#readme",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^13.0.0",
+    "@rollup/plugin-node-resolve": "^8.0.1",
+    "@types/jest": "^26.0.0",
+    "husky": "^4.2.5",
+    "jest": "^25.5.4",
+    "prettier": "^2.0.5",
+    "rollup": "^2.7.2",
+    "rollup-plugin-typescript2": "^0.27.0",
+    "ts-jest": "^25.5.1",
+    "tslib": "^2.0.0",
+    "typescript": "^3.8.3"
+  }
+}
