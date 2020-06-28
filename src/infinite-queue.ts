@@ -6,12 +6,27 @@ type Next<TItem> = {
 };
 
 export type InfiniteQueue<TItem> = {
+  /**
+   * Push an item onto the queue.
+   */
   push: (item: TItem) => void;
+  /**
+   * Returns a promise that will resolve with the oldest item in the queue, when there is one.
+   *
+   * You can provide an `onItem` callback which will be called immediately if there is already an item in the queue, or synchronously from the next `push()` call.
+   * The promise returned from `next()` will resolve with whatever you return from `onItem`.
+   */
   next(): Promise<TItem>;
   next<TReturn>(
     onItem: OnItemCallback<TItem, TReturn | PromiseLike<TReturn>>
   ): Promise<TReturn>;
+  /**
+   * Returns the number of items remaining in the queue.
+   */
   numItems: () => number;
+  /**
+   * Clears the queue and rejects any pending `next()` promises with `queueResetError`.
+   */
   reset: () => void;
 };
 export type OnItemCallback<TItem, TReturn> = (item: TItem) => TReturn;
@@ -62,27 +77,12 @@ export function InfiniteQueue<TItem>(): InfiniteQueue<TItem> {
   }
 
   return {
-    /**
-     * Push an item onto the queue.
-     */
     push(item: TItem): void {
       queue.push(item);
       process();
     },
-    /**
-     * Returns a promise that will resolve with the oldest item in the queue, when there is one.
-     *
-     * You can provide an `onItem` callback which will be called immediately if there is already an item in the queue, or synchronously from the next `push()` call.
-     * The promise returned from `next()` will resolve with whatever you return from `onItem`.
-     */
     next,
-    /**
-     * Returns the number of items remaining in the queue.
-     */
     numItems: () => queue.length,
-    /**
-     * Clears the queue and rejects any pending `next()` promises with `queueResetError`.
-     */
     reset,
   };
 }
