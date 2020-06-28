@@ -9,11 +9,14 @@ export type InfiniteQueue<TItem> = {
   push: (item: TItem) => void;
   next(): Promise<TItem>;
   next<TReturn>(
-    onItem: (item: TItem) => TReturn | PromiseLike<TReturn>
+    onItem: OnItemCallback<TItem, TReturn | PromiseLike<TReturn>>
   ): Promise<TReturn>;
   numItems: () => number;
+  reset: () => void;
 };
 export type OnItemCallback<TItem, TReturn> = (item: TItem) => TReturn;
+
+export const queueResetError = new Error('Queue has been reset.');
 
 export function InfiniteQueue<TItem>(): InfiniteQueue<TItem> {
   const queue: TItem[] = [];
@@ -51,6 +54,13 @@ export function InfiniteQueue<TItem>(): InfiniteQueue<TItem> {
     return deferred.promise;
   }
 
+  function reset(): void {
+    queue.splice(0, queue.length);
+    pendingNexts.splice(0, pendingNexts.length).forEach(({ deferred }) => {
+      deferred.reject(queueResetError);
+    });
+  }
+
   return {
     /**
      * Push an item onto the queue.
@@ -70,5 +80,9 @@ export function InfiniteQueue<TItem>(): InfiniteQueue<TItem> {
      * Returns the number of items remaining in the queue.
      */
     numItems: () => queue.length,
+    /**
+     * Clears the queue and rejects any pending `next()` promises with `queueResetError`.
+     */
+    reset,
   };
 }
