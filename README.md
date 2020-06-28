@@ -38,6 +38,10 @@ Use [`queue.next()`](#queuenext-promisetitem) unless you need to be notified syn
 
 Returns the number of items remaining in the queue.
 
+### `queue.reset()`
+
+Clears the queue and rejects any pending `next()` promises with `queueResetError`.
+
 ## Example
 
 ```ts

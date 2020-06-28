@@ -1,4 +1,4 @@
-import { InfiniteQueue } from './infinite-queue';
+import { InfiniteQueue, queueResetError } from './infinite-queue';
 
 describe('InfiniteQueue', () => {
   it('calls next synchronously on a push', () => {
@@ -95,5 +95,32 @@ describe('InfiniteQueue', () => {
     queue.push(2);
     expect(await queue.next()).toBe(1);
     expect(await queue.next()).toBe(2);
+  });
+
+  it('clears the queue on reset()', async () => {
+    const queue = InfiniteQueue<number>();
+    queue.push(1);
+    queue.push(2);
+
+    expect(queue.numItems()).toBe(2);
+    queue.reset();
+    expect(queue.numItems()).toBe(0);
+
+    queue.push(3);
+    expect(await queue.next()).toBe(3);
+  });
+
+  it('rejects pending next() calls on reset()', (done) => {
+    const queue = InfiniteQueue<number>();
+    const promise = queue.next();
+    queue.reset();
+
+    promise
+      .then(() => done.fail())
+      .catch((e) => {
+        expect(e).toBe(queueResetError);
+        done();
+      })
+      .catch(done.fail);
   });
 });
