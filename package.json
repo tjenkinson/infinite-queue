@@ -1,6 +1,6 @@
 {
   "name": "infinite-queue",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "A small library which implements a queue where you are able to request items early if the queue is empty.",
   "main": "dist/infinite-queue.js",
   "module": "dist/infinite-queue.es.js",
